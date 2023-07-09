@@ -1,0 +1,30 @@
+{
+  "name": "rankman",
+  "version": "1.0.0",
+  "description": "Make decisions with friends via ranked voting!",
+  "main": "index.js",
+  "workspaces": [
+    "server"
+  ],
+  "scripts": {
+    "docker:compose": "docker-compose up -d",
+    "client:dev": "npm run dev --workspace=client",
+    "server:dev": "wait-on tcp:6379 && npm run start:dev --workspace=server",
+    "start": "concurrently 'npm:docker:compose' 'npm:server:dev'",
+    "stop": "docker-compose down",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ts",
+    "react",
+    "nestjs",
+    "socketjs"
+  ],
+  "author": "Octavian Okumu",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.0",
+    "prettier": "^3.0.0",
+    "wait-on": "^7.0.1"
+  }
+}
