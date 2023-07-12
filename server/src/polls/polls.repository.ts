@@ -54,7 +54,7 @@ export class PollsRepository {
           ['expire', key, this.ttl],
         ])
         .exec();
-        this.logger.log(`Finish Running try`);
+      this.logger.log(`Finish Running try`);
       return initialPoll;
     } catch (e) {
       this.logger.error(

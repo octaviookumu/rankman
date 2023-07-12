@@ -19,7 +19,8 @@
     "ts",
     "react",
     "nestjs",
-    "socketjs"
+    "socketjs",
+    "redis"
   ],
   "author": "Octavian Okumu",
   "license": "ISC",
