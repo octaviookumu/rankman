@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -10,6 +10,7 @@ import { PollsService } from '../polls.service';
 import { Socket, Namespace } from 'socket.io';
 import { SocketWithAuth } from '../types';
 
+@UsePipes(new ValidationPipe())
 @WebSocketGateway({
   namespace: 'polls',
 })

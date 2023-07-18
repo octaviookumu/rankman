@@ -1,9 +1,10 @@
-import { Body, Controller, Logger, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Logger, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PollsAuthGuard } from 'src/auth/polls-auth.guard';
 import { CreatePollDto, JoinPollDto } from './dto';
 import { PollsService } from './polls.service';
 import { RequestWithAuth } from './types';
 
+@UsePipes(new ValidationPipe())
 @Controller('polls')
 export class PollsController {
   constructor(private pollsService: PollsService) {}
