@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CanActivate, Logger, ExecutionContext } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
+import { RequestWithAuth } from 'src/polls/types';
 
 @Injectable()
 export class PollsAuthGuard implements CanActivate {
@@ -11,13 +12,14 @@ export class PollsAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const request: RequestWithAuth = context.switchToHttp().getRequest();
 
     this.logger.debug(`Checking for auth token on request body`, request.body);
     const { accessToken } = request.body;
 
     try {
       const payload = this.jwtService.verify(accessToken);
+      // verifies token and turns it into JS object 
       // add details to the request
       request.userID = payload.sub;
       request.pollID = payload.pollID;
