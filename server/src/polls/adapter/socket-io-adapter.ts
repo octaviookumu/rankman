@@ -37,6 +37,8 @@ export class SocketIOAdapter extends IoAdapter {
 
     // we need to return this, even though the signature says it returns void
     const server: Server = super.createIOServer(port, optionsWithCORS);
+
+    // get access to authorization before connecting
     server.of('polls').use(createTokenMiddleware(jwtService, this.logger));
     return server;
   }
