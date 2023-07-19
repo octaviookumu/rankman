@@ -1,16 +1,19 @@
-import { Logger, UsePipes, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Logger, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
+  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
 import { PollsService } from '../polls.service';
-import { Socket, Namespace } from 'socket.io';
+import { Namespace } from 'socket.io';
 import { SocketWithAuth } from '../types';
+import { WsCatchAllFilter } from 'src/exceptions/ws-catch-all-filter';
 
 @UsePipes(new ValidationPipe())
+@UseFilters(new WsCatchAllFilter())
 @WebSocketGateway({
   namespace: 'polls',
 })
@@ -41,15 +44,20 @@ export class PollsGateway
   }
 
   handleDisconnect(client: SocketWithAuth) {
-      const sockets = this.io.sockets;
-      
-      this.logger.debug(
-        `Socket disconnected with userID: ${client.userID}, pollID: ${client.pollID} and name: ${client.name}`,
-      );
+    const sockets = this.io.sockets;
+
+    this.logger.debug(
+      `Socket disconnected with userID: ${client.userID}, pollID: ${client.pollID} and name: ${client.name}`,
+    );
 
     this.logger.log(`Disconnect socket id: ${client.id}`);
     this.logger.debug(`No of disconnected sockets: ${sockets.size}`);
 
     // TODO: remove client from poll and send `participants_updated` event to remaining clients
+  }
+
+  @SubscribeMessage('test')
+  test() {
+    throw new BadRequestException({ test: 'test' })
   }
 }
