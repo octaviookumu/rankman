@@ -1,5 +1,5 @@
 import { Body, Controller, Logger, Post, Req, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { PollsAuthGuard } from 'src/auth/polls-auth.guard';
+import { PollsAuthGuard } from '../auth/polls-auth.guard';
 import { CreatePollDto, JoinPollDto } from './dto';
 import { PollsService } from './polls.service';
 import { RequestWithAuth } from './types';

@@ -8,7 +8,12 @@ import {
   RejoinPollFields,
   SubmitRankingsFields,
 } from './types';
-import { createPollID, createUserID, createNominationID } from './utils';
+import {
+  createPollID,
+  createUserID,
+  createNominationID,
+  getResults,
+} from './utils';
 import { JwtService } from '@nestjs/jwt';
 import { Poll } from 'shared';
 
@@ -147,5 +152,21 @@ export class PollsService {
     }
 
     return this.pollsRepository.addParticipantRankings(rankingsData);
+  }
+
+  async computeResults(pollID: string): Promise<Poll> {
+    const poll = await this.pollsRepository.getPoll(pollID);
+
+    const results = getResults(
+      poll.rankings,
+      poll.nominations,
+      poll.votesPerVoter,
+    );
+
+    return this.pollsRepository.addResults(pollID, results);
+  }
+
+  async cancelPoll(pollID: string): Promise<void> {
+    return this.pollsRepository.deletePoll(pollID);
   }
 }
