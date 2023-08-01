@@ -7,7 +7,12 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
 import { IORedisKey } from 'src/redis/redis.module';
-import { AddNominationData, AddParticipantData, CreatePollData } from './types';
+import {
+  AddNominationData,
+  AddParticipantData,
+  AddParticipantRankingsData,
+  CreatePollData,
+} from './types';
 import { Poll } from 'shared';
 
 @Injectable()
@@ -38,6 +43,7 @@ export class PollsRepository {
       adminID: userID,
       hasStarted: false,
       nominations: {},
+      rankings: {},
     };
 
     this.logger.log(
@@ -147,7 +153,7 @@ export class PollsRepository {
   async addNomination({
     pollID,
     nominationID,
-    nomination
+    nomination,
   }: AddNominationData): Promise<Poll> {
     this.logger.log(
       `Attempting to add a nomination with nominationID/nomination: ${nominationID}/${nomination.text} to pollID: ${pollID}`,
@@ -197,6 +203,62 @@ export class PollsRepository {
 
       throw new InternalServerErrorException(
         `Failed to remove nominationID: ${nominationID} from pollID: ${pollID}`,
+      );
+    }
+  }
+
+  async startPoll(pollID: string): Promise<Poll> {
+    this.logger.log(`Setting hasStarted for poll: ${pollID}`);
+
+    const key = `polls:${pollID}`;
+
+    try {
+      await this.redisClient.call(
+        'JSON_SET',
+        key,
+        '.hasStarted',
+        JSON.stringify(true),
+      );
+
+      return this.getPoll(pollID);
+    } catch (error) {
+      this.logger.error(`Failed to set hasStarted for poll: ${pollID}`, error);
+
+      throw new InternalServerErrorException(
+        `There was an error starting the poll`,
+      );
+    }
+  }
+
+  async addParticipantRankings({
+    pollID,
+    userID,
+    rankings,
+  }: AddParticipantRankingsData): Promise<Poll> {
+    this.logger.log(
+      `Attempting to add rankings for userID/name: ${userID} to pollID: ${pollID}`,
+      rankings,
+    );
+
+    const key = `polls:${pollID}`;
+    const rankingsPath = `.rankings.${userID}`;
+
+    try {
+      await this.redisClient.call(
+        'JSON.SET',
+        key,
+        rankingsPath,
+        JSON.stringify(rankings),
+      );
+
+      return this.getPoll(pollID);
+    } catch (e) {
+      this.logger.error(
+        `Failed to add a rankings for userID/name: ${userID}/ to pollID: ${pollID}`,
+        rankings,
+      );
+      throw new InternalServerErrorException(
+        'There was an error starting the poll',
       );
     }
   }
