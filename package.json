@@ -4,7 +4,8 @@
   "description": "Make decisions with friends via ranked voting!",
   "main": "index.js",
   "workspaces": [
-    "server"
+    "server",
+    "shared"
   ],
   "scripts": {
     "docker:compose": "docker-compose up -d",
@@ -18,7 +19,8 @@
     "ts",
     "react",
     "nestjs",
-    "socketjs"
+    "socketjs",
+    "redis"
   ],
   "author": "Octavian Okumu",
   "license": "ISC",
