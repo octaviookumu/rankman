@@ -18,7 +18,7 @@ const initialState = {
   },
 } as InitialState;
 
-export const poll = createSlice({
+export const pollSlice = createSlice({
   name: "poll",
   initialState,
   reducers: {
@@ -63,5 +63,5 @@ export const poll = createSlice({
 });
 
 export const { startLoading, stopLoading, initializePoll, setAccessToken } =
-  poll.actions;
-export default poll.reducer;
+  pollSlice.actions;
+export default pollSlice.reducer;

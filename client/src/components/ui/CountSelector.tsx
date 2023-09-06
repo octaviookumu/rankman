@@ -30,7 +30,7 @@ const CountSelector: React.FC<CountSelectorProps> = ({
 
   useEffect(() => {
     onChange(current);
-  }, [current]);
+  }, [current, onChange]);
 
   return (
     <div className="flex justify-between items-center">

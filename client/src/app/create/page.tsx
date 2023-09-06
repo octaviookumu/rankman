@@ -10,8 +10,9 @@ import {
   setAccessToken,
   stopLoading,
 } from "@/redux/features/poll-slice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import Loader from "@/components/ui/Loader";
 
 const Create = () => {
   const router = useRouter();
@@ -21,6 +22,9 @@ const Create = () => {
   const [apiError, setApiError] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
+  const isLoading = useSelector(
+    (state: RootState) => state.pollReducer.value.isLoading
+  );
 
   const areFieldsValid = (): boolean => {
     if (pollTopic.length < 1 || pollTopic.length > 100) {
@@ -54,8 +58,6 @@ const Create = () => {
       }),
     });
 
-    console.log(data, error);
-
     if (error && error.statusCode === 400) {
       console.log("400 error", error);
       setApiError("Name and poll topic are both required!");
@@ -75,8 +77,8 @@ const Create = () => {
   };
 
   return (
-    <div className="flex flex-col w-full justify-around items-stretch h-full mx-auto max-w-sm">
-      <div className="mb-12">
+    <div className="flex flex-col w-[85%] md:w-[45%] h-[100svh] mx-auto items-center justify-center">
+      <div className="mb-12 w-full">
         <h3 className="text-center">Enter Poll Topic</h3>
         <div className="text-center w-full">
           <input
@@ -109,6 +111,9 @@ const Create = () => {
           <p className="text-center text-red-600 font-light mt-8">{apiError}</p>
         )}
       </div>
+
+      <Loader isLoading={isLoading} color="orange" width={120}></Loader>
+
       <div className="flex flex-col justify-center items-center">
         <button
           className="box btn-orange w-32 my-2"

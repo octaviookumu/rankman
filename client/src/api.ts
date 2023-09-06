@@ -1,6 +1,4 @@
-const baseApiUrl = `http://${process.env.API_HOST}:${process.env.API_PORT}`;
-
-console.log("baseApiUrl", baseApiUrl);
+const baseApiUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}`;
 
 interface APIError {
   messages: string[];
