@@ -124,7 +124,7 @@ const Create = () => {
         </button>
         <button
           className="box btn-purple w-32 my-2"
-          onClick={() => router.push("/welcome")}
+          onClick={() => router.push("/")}
         >
           Start Over
         </button>

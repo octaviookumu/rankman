@@ -1,9 +1,10 @@
-import Pages from "../../Pages";
+// import Pages from "../../Pages";
+import Welcome from "./welcome/page";
 
 export default function Home() {
   return (
-    <div>
-      <Pages />
-    </div>
+    <>
+      <Welcome />
+    </>
   );
 }
