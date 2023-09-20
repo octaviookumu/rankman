@@ -1,3 +1,4 @@
+// Handled Socket.io
 import {
   BadRequestException,
   Logger,
@@ -44,12 +45,14 @@ export class PollsGateway
   async handleConnection(client: SocketWithAuth) {
     const sockets = this.io.sockets;
 
+    // Logs who is connecting
     this.logger.debug(
       `Socket connected with userID: ${client.userID}, pollID: ${client.pollID} and name: ${client.name}`,
     );
     this.logger.log(`WS with client id: ${client.id} connected!`);
     this.logger.debug(`No of sockets connected: ${sockets.size}`);
 
+    // Get the poll the person needs to connect to from their token
     const roomName = client.pollID;
 
     // have a socket join the room
@@ -63,13 +66,15 @@ export class PollsGateway
       `Total clients connected to room ${roomName}: ${connectedClients}`,
     );
 
+    // Add participant to poll in db
     const updatedPoll = await this.pollsService.addParticipant({
       pollID: client.pollID,
       userID: client.userID,
       name: client.name,
     });
 
-    // send event to all clients connected to a room
+    // send event to all clients connected to a room/poll
+    // can change if you only want to send the participants names instead of the whole poll
     this.io.to(roomName).emit('poll_updated', updatedPoll);
   }
 

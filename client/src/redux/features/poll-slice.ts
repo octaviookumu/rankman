@@ -96,7 +96,7 @@ export const PollSlice = createSlice({
         id: token.sub,
         name: token.name,
       };
-      setLocalStorageAccessToken(action.payload)
+      setLocalStorageAccessToken(action.payload);
 
       return {
         value: {
@@ -105,13 +105,38 @@ export const PollSlice = createSlice({
           poll: state.value.poll,
           accessToken: action.payload,
           me,
-          isAdmin: me?.id === state.value.poll?.adminID
+          isAdmin: me?.id === state.value.poll?.adminID,
+        },
+      };
+    },
+    initializeToken: (state) => {
+      if (state.value.socket) {
+        state.value.socket.connect();
+      }
+
+      return {
+        value: {
+          ...state.value,
+        },
+      };
+    },
+    updatePoll: (state, action: PayloadAction<Poll>) => {
+      return {
+        value: {
+          ...state.value,
+          poll: action.payload,
         },
       };
     },
   },
 });
 
-export const { startLoading, stopLoading, initializePoll, setAccessToken } =
-  PollSlice.actions;
+export const {
+  startLoading,
+  stopLoading,
+  initializePoll,
+  setAccessToken,
+  initializeToken,
+  updatePoll,
+} = PollSlice.actions;
 export default PollSlice.reducer;
