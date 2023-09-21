@@ -1,5 +1,9 @@
 "use client";
-import { initializeToken, updatePoll } from "@/redux/features/poll-slice";
+import {
+  initializeToken,
+  stopLoading,
+  updatePoll,
+} from "@/redux/features/poll-slice";
 import { selectAccessToken } from "@/redux/selectors";
 import { AppDispatch, RootState } from "@/redux/store";
 import React, { useEffect } from "react";
@@ -29,6 +33,12 @@ const WaitingRoom = () => {
       console.log(
         `Connected with socketID: ${socket.id}. userID: ${state.me?.id} will join room ${state.poll?.id}`
       );
+      dispatch(stopLoading());
+    });
+
+    socket.on("connect_error", () => {
+      console.log("Failed to connect to socket");
+      dispatch(stopLoading());
     });
 
     socket.on("poll_updated", (poll) => {
