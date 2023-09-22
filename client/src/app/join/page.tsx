@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "@/redux/store";
 import {
   initializePoll,
   startLoading,
-  setAccessToken,
+  setPollAccessToken,
   stopLoading,
 } from "@/redux/features/poll-slice";
 import { Poll } from "shared/poll-types";
@@ -56,7 +56,7 @@ const Join = () => {
       // actions.initializePoll(data.poll);
       dispatch(initializePoll(data.poll));
       // actions.setPollAccessToken(data.accessToken);
-      dispatch(setAccessToken(data.accessToken));
+      dispatch(setPollAccessToken(data.accessToken));
       router.push("/waiting-room");
     }
 

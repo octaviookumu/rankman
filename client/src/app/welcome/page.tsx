@@ -6,18 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useEffect } from "react";
 import {
-  initializeToken,
-  setAccessToken,
+  setPollAccessToken,
   startLoading,
   stopLoading,
-  updatePoll,
 } from "@/redux/features/poll-slice";
-import { Poll } from "shared/poll-types";
-import { io, Socket } from "socket.io-client";
 import { getTokenPayload } from "@/utils/util";
 import { useRouter } from "next/navigation";
-
-const socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_POLLS_NAMESPACE}`;
+import { useSocketWithHandlers } from "@/utils/socket-io";
 
 const Welcome = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -29,11 +24,12 @@ const Welcome = () => {
     return state.pollReducer.value.isLoading;
   });
   const router = useRouter();
+  const socketWithHandlers = useSocketWithHandlers(state);
 
   useEffect(() => {
     console.log("Page useEffect - check token");
     dispatch(startLoading());
-    console.log("start loading", state);
+    console.log("start loading");
 
     const accessToken = localStorage.getItem("accessToken");
     console.log("accessToken", accessToken);
@@ -41,7 +37,7 @@ const Welcome = () => {
     // if there's no accessToken show the default Welcome page
     if (!accessToken) {
       dispatch(stopLoading());
-      console.log("stop loading", state);
+      console.log("stop loading");
       return;
     }
 
@@ -53,51 +49,33 @@ const Welcome = () => {
     if (tokenExp < currentTimeInSeconds - 10) {
       localStorage.removeItem("accessToken");
       dispatch(stopLoading());
-      console.log("stop loading", state);
+      console.log("stop loading");
       return;
     }
 
     // reconnect to poll
-    dispatch(setAccessToken(accessToken)); // needed for socket connection
+    dispatch(setPollAccessToken(accessToken)); // needed for socket connection
 
-    // dispatch(initialize)
-    // if (state.socket) return;
-
-    const socket = io(socketIOUrl, {
-      auth: {
-        token: state.accessToken,
-      },
-      transports: ["websocket", "polling"],
-    });
-
-    socket.on("connect", () => {
-      console.log(
-        `Connected with socketID: ${socket.id}. userID: ${state.me?.id} will join room ${state.poll?.id}`
-      );
-      dispatch(stopLoading());
-    });
-
-    socket.on("connect_error", () => {
-      console.log("Failed to connect to socket");
-      dispatch(stopLoading());
-    });
-
-    socket.on("poll_updated", (poll: Poll) => {
-      dispatch(updatePoll(poll));
-    });
-
-    dispatch(initializeToken());
+    if(socketWithHandlers) socketWithHandlers.connect()
 
     if (state.me?.id && !state.poll?.hasStarted) {
       router.push("/waiting-room");
     }
 
     return () => {
-      socket.disconnect();
+      if (socketWithHandlers) {
+        socketWithHandlers.disconnect();
+      }
     };
-
-    return () => {};
-  }, [isLoading, state.accessToken, state.me?.id, state.poll?.hasStarted]);
+  }, [
+    dispatch,
+    router,
+    isLoading,
+    state.accessToken,
+    state.me?.id,
+    state.poll?.hasStarted,
+    socketWithHandlers,
+  ]);
 
   return (
     <>

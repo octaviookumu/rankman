@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   startLoading,
   initializePoll,
-  setAccessToken,
+  setPollAccessToken,
   stopLoading,
 } from "@/redux/features/poll-slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -67,7 +67,7 @@ const Create = () => {
     } else {
       // actions.initializePoll(data.poll);
       dispatch(initializePoll(data.poll));
-      dispatch(setAccessToken(data.accessToken));
+      dispatch(setPollAccessToken(data.accessToken));
       //   actions.setPollAccessToken(data.accessToken);
       // actions.setPage(AppPage.WaitingRoom);
       router.push("/waiting-room");

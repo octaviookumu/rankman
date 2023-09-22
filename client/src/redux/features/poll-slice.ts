@@ -1,7 +1,6 @@
 import { getTokenPayload, setLocalStorageAccessToken } from "@/utils/util";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Poll } from "shared/poll-types";
-import { Socket } from "socket.io-client";
 
 export type StateType = {
   value: PollState;
@@ -21,11 +20,10 @@ type WsErrorUnique = WsError & {
   id: string;
 };
 
-type PollState = {
+export type PollState = {
   isLoading: boolean;
   poll?: undefined | Poll;
   accessToken: string;
-  socket?: undefined | Socket;
   wsErrors: undefined | WsErrorUnique[];
   me?: Me;
   isAdmin: boolean;
@@ -34,6 +32,7 @@ type PollState = {
   canStartVote: boolean;
   hasVoted: boolean;
   rankingsCount: number;
+  isSocketConnected: boolean;
 };
 
 const initialState = {
@@ -41,7 +40,6 @@ const initialState = {
     isLoading: false,
     poll: undefined,
     accessToken: "",
-    socket: undefined,
     wsErrors: undefined,
     me: {
       id: undefined,
@@ -53,6 +51,7 @@ const initialState = {
     canStartVote: false,
     hasVoted: false,
     rankingsCount: 0,
+    isSocketConnected: false,
   },
 } as StateType;
 
@@ -90,7 +89,7 @@ export const PollSlice = createSlice({
         },
       };
     },
-    setAccessToken: (state, action: PayloadAction<string>) => {
+    setPollAccessToken: (state, action: PayloadAction<string>) => {
       const token = getTokenPayload(action.payload);
       const me = {
         id: token.sub,
@@ -109,14 +108,19 @@ export const PollSlice = createSlice({
         },
       };
     },
-    initializeToken: (state) => {
-      if (state.value.socket) {
-        state.value.socket.connect();
-      }
-
+    socketConnected: (state) => {
       return {
         value: {
           ...state.value,
+          isSocketConnected: true,
+        },
+      };
+    },
+    socketDisconnected: (state) => {
+      return {
+        value: {
+          ...state.value,
+          isSocketConnected: false,
         },
       };
     },
@@ -135,8 +139,9 @@ export const {
   startLoading,
   stopLoading,
   initializePoll,
-  setAccessToken,
-  initializeToken,
+  setPollAccessToken,
   updatePoll,
+  socketConnected,
+  socketDisconnected,
 } = PollSlice.actions;
 export default PollSlice.reducer;
