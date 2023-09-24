@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useEffect } from "react";
 import {
+  removeWsError,
   setPollAccessToken,
   startLoading,
   stopLoading,
@@ -13,10 +14,13 @@ import {
 import { getTokenPayload } from "@/utils/util";
 import { useRouter } from "next/navigation";
 import { useSocketWithHandlers } from "@/utils/socket-io";
+import Toast from "@/components/ui/Toast";
+import AllToasts from "@/components/ui/AllToasts";
 
 const Welcome = () => {
   const dispatch = useDispatch<AppDispatch>();
   const state = useSelector((state: RootState) => {
+    console.log("state", state.pollReducer.value);
     return state.pollReducer.value;
   });
   const isLoading = useSelector((state: RootState) => {
@@ -49,67 +53,68 @@ const Welcome = () => {
     if (tokenExp < currentTimeInSeconds - 10) {
       localStorage.removeItem("accessToken");
       dispatch(stopLoading());
-      console.log("stop loading");
+      console.log("stop loading - expiry");
       return;
     }
 
     // reconnect to poll
     dispatch(setPollAccessToken(accessToken)); // needed for socket connection
 
-    if(socketWithHandlers) socketWithHandlers.connect()
+    if (socketWithHandlers) socketWithHandlers.connect();
 
-    if (state.me?.id && !state.poll?.hasStarted) {
+    if (state.me?.id && state.poll && !state.poll?.hasStarted) {
       router.push("/waiting-room");
     }
 
+    dispatch(stopLoading());
     return () => {
       if (socketWithHandlers) {
         socketWithHandlers.disconnect();
       }
     };
-  }, [
-    dispatch,
-    router,
-    isLoading,
-    state.accessToken,
-    state.me?.id,
-    state.poll?.hasStarted,
-    socketWithHandlers,
-  ]);
+  }, [socketWithHandlers]);
 
   return (
     <>
-      <Loader isLoading={isLoading} color="orange" width={120}></Loader>
-      <AnimatePresence mode="wait">
-        <motion.div
-          initial={{ y: -300, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{
-            type: "spring",
-            delay: 0.2,
-          }}
-        >
-          <div className="page mobile-height max-w-screen-sm mx-auto py-8 px-4 overflow-y-auto">
-            <div className="flex flex-col justify-center items-center h-full">
-              <h1 className="text-center my-12">Welcome to Rankman</h1>
-              <div className="my-12 flex flex-col justify-center items-center">
-                <Link href="/create">
-                  <button className="box btn-orange my-2">
-                    Create New Poll
-                  </button>
-                </Link>
+      {isLoading ? (
+        <Loader isLoading={isLoading} color="orange" width={120}></Loader>
+      ) : (
+        <>
+          {state.wsErrors.length > 0 && (
+            <AllToasts wsErrors={state.wsErrors}></AllToasts>
+          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              initial={{ y: -300, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{
+                type: "spring",
+                delay: 0.2,
+              }}
+            >
+              <div className="page mobile-height max-w-screen-sm mx-auto py-8 px-4 overflow-y-auto">
+                <div className="flex flex-col justify-center items-center h-full">
+                  <h1 className="text-center my-12">Welcome to Rankman</h1>
+                  <div className="my-12 flex flex-col justify-center items-center">
+                    <Link href="/create">
+                      <button className="box btn-orange my-2">
+                        Create New Poll
+                      </button>
+                    </Link>
 
-                <Link href="/join">
-                  <button className="box btn-purple my-2">
-                    Join Existing Poll
-                  </button>
-                </Link>
+                    <Link href="/join">
+                      <button className="box btn-purple my-2">
+                        Join Existing Poll
+                      </button>
+                    </Link>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>
+        </>
+      )}
     </>
   );
 };

@@ -1,4 +1,5 @@
 import {
+  addWsError,
   socketConnected,
   socketDisconnected,
   stopLoading,
@@ -38,7 +39,21 @@ export const initializeSocket = (
 
     socket.on("connect_error", () => {
       console.log("Failed to connect to socket");
-      if (dispatch) dispatch(stopLoading());
+
+      if (dispatch) {
+        dispatch(
+          addWsError({
+            type: "Connection Error",
+            message: "Failed to connect to the poll",
+          })
+        );
+        // dispatch(stopLoading());
+      }
+    });
+
+    socket.on("exception", (exception) => {
+      console.log("WS Exception", exception);
+      if (dispatch) dispatch(addWsError(exception));
     });
 
     socket.on("poll_updated", (poll: Poll) => {

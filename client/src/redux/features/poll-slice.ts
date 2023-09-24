@@ -1,5 +1,5 @@
 import { getTokenPayload, setLocalStorageAccessToken } from "@/utils/util";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { Poll } from "shared/poll-types";
 
 export type StateType = {
@@ -16,7 +16,7 @@ type WsError = {
   message: string;
 };
 
-type WsErrorUnique = WsError & {
+export type WsErrorUnique = WsError & {
   id: string;
 };
 
@@ -24,7 +24,7 @@ export type PollState = {
   isLoading: boolean;
   poll?: undefined | Poll;
   accessToken: string;
-  wsErrors: undefined | WsErrorUnique[];
+  wsErrors: WsErrorUnique[];
   me?: Me;
   isAdmin: boolean;
   nominationCount: number;
@@ -40,7 +40,7 @@ const initialState = {
     isLoading: false,
     poll: undefined,
     accessToken: "",
-    wsErrors: undefined,
+    wsErrors: [],
     me: {
       id: undefined,
       name: undefined,
@@ -83,7 +83,7 @@ export const PollSlice = createSlice({
       return {
         value: {
           ...state.value,
-          isLoading: false,
+          isLoading: true,
           poll: action.payload,
           accessToken: state.value.accessToken,
         },
@@ -100,7 +100,7 @@ export const PollSlice = createSlice({
       return {
         value: {
           ...state.value,
-          isLoading: false,
+          isLoading: true,
           poll: state.value.poll,
           accessToken: action.payload,
           me,
@@ -132,6 +132,30 @@ export const PollSlice = createSlice({
         },
       };
     },
+    addWsError: (state, action: PayloadAction<WsError>) => {
+      return {
+        value: {
+          ...state.value,
+          wsErrors: [
+            ...state.value.wsErrors,
+            {
+              ...action.payload,
+              id: nanoid(6),
+            },
+          ],
+        },
+      };
+    },
+    removeWsError: (state, action: PayloadAction<string>) => {
+      return {
+        value: {
+          ...state.value,
+          wsErrors: state.value.wsErrors.filter(
+            (error) => error.id !== action.payload
+          ),
+        },
+      };
+    },
   },
 });
 
@@ -143,5 +167,7 @@ export const {
   updatePoll,
   socketConnected,
   socketDisconnected,
+  addWsError,
+  removeWsError,
 } = PollSlice.actions;
 export default PollSlice.reducer;
