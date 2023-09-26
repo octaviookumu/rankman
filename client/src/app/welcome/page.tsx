@@ -19,16 +19,12 @@ import AllToasts from "@/components/ui/AllToasts";
 
 const Welcome = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
   const state = useSelector((state: RootState) => {
     console.log("state", state.pollReducer.value);
     return state.pollReducer.value;
   });
-  const isLoading = useSelector((state: RootState) => {
-    console.log("isloading changed", state.pollReducer.value.isLoading);
-    return state.pollReducer.value.isLoading;
-  });
-  const router = useRouter();
-  const socketWithHandlers = useSocketWithHandlers(state);
+  const { socketWithHandlers } = useSocketWithHandlers(state);
 
   useEffect(() => {
     console.log("Page useEffect - check token");
@@ -72,12 +68,12 @@ const Welcome = () => {
         socketWithHandlers.disconnect();
       }
     };
-  }, [socketWithHandlers]);
+  }, []);
 
   return (
     <>
-      {isLoading ? (
-        <Loader isLoading={isLoading} color="orange" width={120}></Loader>
+      {state.isLoading ? (
+        <Loader isLoading={state.isLoading} color="orange" width={120}></Loader>
       ) : (
         <>
           {state.wsErrors.length > 0 && (
@@ -93,22 +89,20 @@ const Welcome = () => {
                 delay: 0.2,
               }}
             >
-              <div className="page mobile-height max-w-screen-sm mx-auto py-8 px-4 overflow-y-auto">
-                <div className="flex flex-col justify-center items-center h-full">
-                  <h1 className="text-center my-12">Welcome to Rankman</h1>
-                  <div className="my-12 flex flex-col justify-center items-center">
-                    <Link href="/create">
-                      <button className="box btn-orange my-2">
-                        Create New Poll
-                      </button>
-                    </Link>
+              <div className="flex flex-col justify-center items-center h-[100svh]">
+                <h1 className="text-center my-12">Welcome to Rankman</h1>
+                <div className="my-12 flex flex-col justify-center items-center">
+                  <Link href="/create">
+                    <button className="box btn-orange my-2">
+                      Create New Poll
+                    </button>
+                  </Link>
 
-                    <Link href="/join">
-                      <button className="box btn-purple my-2">
-                        Join Existing Poll
-                      </button>
-                    </Link>
-                  </div>
+                  <Link href="/join">
+                    <button className="box btn-purple my-2">
+                      Join Existing Poll
+                    </button>
+                  </Link>
                 </div>
               </div>
             </motion.div>

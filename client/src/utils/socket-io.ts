@@ -11,6 +11,22 @@ export const useSocketWithHandlers = (pollState: PollState) => {
   const dispatch = useDispatch<AppDispatch>();
   const socketRef = useRef<Socket | undefined>(undefined);
 
+  const nominate = (text: string): void => {
+    socketRef.current?.emit("nominate", { text });
+  };
+
+  const removeNomination = (id: string): void => {
+    socketRef.current?.emit("remove_nomination", { id });
+  };
+
+  const removeParticipant = (id: string): void => {
+    socketRef.current?.emit("remove_participant", { id });
+  };
+
+  const startVote = () => {
+    socketRef.current?.emit("start_vote");
+  };
+
   useEffect(() => {
     if (pollState.accessToken) {
       socketRef.current = initializeSocket(pollState.accessToken, dispatch);
@@ -25,5 +41,11 @@ export const useSocketWithHandlers = (pollState: PollState) => {
     };
   }, [dispatch, pollState.accessToken]);
 
-  return socketRef.current;
+  return {
+    socketWithHandlers: socketRef.current,
+    nominate,
+    removeNomination,
+    removeParticipant,
+    startVote,
+  };
 };

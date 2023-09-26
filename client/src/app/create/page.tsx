@@ -14,6 +14,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import Loader from "@/components/ui/Loader";
+import { useSocketWithHandlers } from "@/utils/socket-io";
 
 const Create = () => {
   const router = useRouter();
@@ -21,24 +22,14 @@ const Create = () => {
   const [maxVotes, setMaxVotes] = useState(3);
   const [name, setName] = useState("");
   const [apiError, setApiError] = useState("");
-
   const dispatch = useDispatch<AppDispatch>();
-  const isLoading = useSelector(
-    (state: RootState) => state.pollReducer.value.isLoading
-  );
+  const state = useSelector((state: RootState) => state.pollReducer.value);
+  const { socketWithHandlers } = useSocketWithHandlers(state);
 
   const areFieldsValid = (): boolean => {
-    if (pollTopic.length < 1 || pollTopic.length > 100) {
-      return false;
-    }
-
-    if (maxVotes < 1 || maxVotes > 5) {
-      return false;
-    }
-
-    if (name.length < 1 || name.length > 25) {
-      return false;
-    }
+    if (pollTopic.length < 1 || pollTopic.length > 100) return false;
+    if (maxVotes < 1 || maxVotes > 5) return false;
+    if (name.length < 1 || name.length > 25) return false;
 
     return true;
   };
@@ -71,13 +62,20 @@ const Create = () => {
       router.push("/waiting-room");
     }
 
-    dispatch(stopLoading());
+    // dispatch(stopLoading());
   };
+
+  const startOver = () => {
+    socketWithHandlers?.disconnect();
+    localStorage.removeItem("accessToken");
+    router.push("/");
+  };
+
 
   return (
     <>
-      {isLoading ? (
-        <Loader isLoading={isLoading} color="orange" width={120}></Loader>
+      {state.isLoading ? (
+        <Loader isLoading={state.isLoading} color="orange" width={120}></Loader>
       ) : (
         <AnimatePresence mode="wait">
           <motion.div
@@ -136,7 +134,7 @@ const Create = () => {
                 </button>
                 <button
                   className="box btn-purple w-32 my-2"
-                  onClick={() => router.push("/")}
+                  onClick={() => startOver()}
                 >
                   Start Over
                 </button>

@@ -23,13 +23,10 @@ export type WsErrorUnique = WsError & {
 export type PollState = {
   isLoading: boolean;
   poll?: undefined | Poll;
-  accessToken: string;
+  accessToken: string | undefined;
   wsErrors: WsErrorUnique[];
   me?: Me;
   isAdmin: boolean;
-  nominationCount: number;
-  participantCount: number;
-  canStartVote: boolean;
   hasVoted: boolean;
   rankingsCount: number;
   isSocketConnected: boolean;
@@ -46,9 +43,6 @@ const initialState = {
       name: undefined,
     },
     isAdmin: false,
-    nominationCount: 0,
-    participantCount: 0,
-    canStartVote: false,
     hasVoted: false,
     rankingsCount: 0,
     isSocketConnected: false,
@@ -156,6 +150,17 @@ export const PollSlice = createSlice({
         },
       };
     },
+    reset: (state) => {
+      return {
+        value: {
+          ...state.value,
+          poll: undefined,
+          accessToken: undefined,
+          isLoading: false,
+          wsErrors: [],
+        },
+      };
+    },
   },
 });
 
@@ -169,5 +174,6 @@ export const {
   socketDisconnected,
   addWsError,
   removeWsError,
+  reset,
 } = PollSlice.actions;
 export default PollSlice.reducer;
