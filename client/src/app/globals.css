@@ -79,6 +79,14 @@ body {
   @apply bg-gray-500 bg-opacity-25 cursor-not-allowed;
 }
 
+.text-orange {
+  color: rgb(234 88 12);
+}
+
+.text-indigo {
+  color: rgb(79 70 229);
+}
+
 .mobile-height {
   @apply h-screen;
 }
@@ -97,7 +105,9 @@ body {
 .page-enter-active {
   opacity: 1;
   transform: translateY(0%);
-  transition: opacity 300ms, transform 300ms;
+  transition:
+    opacity 300ms,
+    transform 300ms;
 }
 
 .page-exit {
@@ -108,7 +118,9 @@ body {
 .page-exit-active {
   opacity: 0;
   transform: translateY(-100%);
-  transition: opacity 300ms, transform 300ms;
+  transition:
+    opacity 300ms,
+    transform 300ms;
 }
 
 .pulsate {

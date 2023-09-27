@@ -1,4 +1,5 @@
 "use client";
+import Toast from "@/components/ui/Toast";
 import { Provider } from "react-redux";
 import { store } from "./store";
 
