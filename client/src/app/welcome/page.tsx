@@ -81,7 +81,7 @@ const Welcome = () => {
           )}
           <AnimatePresence mode="wait">
             <motion.div
-              initial={{ y: -300, opacity: 0 }}
+              initial={{ y: 300, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{

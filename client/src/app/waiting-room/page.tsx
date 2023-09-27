@@ -14,6 +14,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import { useRouter } from "next/navigation";
 import ParticipantList from "@/components/ui/ParticipantList";
+import NominationForm from "@/components/ui/NominationForm";
 
 const WaitingRoom = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +28,7 @@ const WaitingRoom = () => {
       nominationsCount >= (state.pollReducer.value.poll?.votesPerVoter ?? 100)
     );
   });
-  const { socketWithHandlers, removeParticipant } =
+  const { socketWithHandlers, removeParticipant, nominate, removeNomination } =
     useSocketWithHandlers(state);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [isParticipantListOpen, setIsParticipantListOpen] = useState(false);
@@ -75,7 +76,7 @@ const WaitingRoom = () => {
           )}
           <AnimatePresence mode="wait">
             <motion.div
-              initial={{ y: -300, opacity: 0 }}
+              initial={{ y: 300, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{
@@ -149,6 +150,8 @@ const WaitingRoom = () => {
                   >
                     Leave Poll
                   </button>
+
+                  {/* Removing yourself */}
                   <ConfirmationDialog
                     message="You will be kicked out of the poll"
                     showDialog={showLeavePollConfirmation}
@@ -164,9 +167,30 @@ const WaitingRoom = () => {
             isOpen={isParticipantListOpen}
             onClose={() => setIsParticipantListOpen(false)}
             participants={state.poll?.participants}
-            onRemoveParticipant={() => confirmRemoveParticipant('deeznuts')}
+            onRemoveParticipant={confirmRemoveParticipant}
             isAdmin={state.isAdmin || false}
             userID={state.me?.id}
+          />
+
+          <NominationForm
+            title={state.poll?.topic}
+            isOpen={isNominationFormOpen}
+            onClose={() => setIsNominationFormOpen(false)}
+            onSubmitNomination={(nominationText) => nominate(nominationText)}
+            nominations={state.poll?.nominations}
+            userID={state.me?.id}
+            onRemoveNomination={(nominationID) =>
+              removeNomination(nominationID)
+            }
+            isAdmin={state.isAdmin || false}
+          />
+
+          {/* Removing the participant */}
+          <ConfirmationDialog
+            message={confirmationMessage}
+            showDialog={isConfirmationOpen}
+            onCancel={() => setIsConfirmationOpen(false)}
+            onConfirm={() => submitRemoveParticipant()}
           />
         </>
       )}

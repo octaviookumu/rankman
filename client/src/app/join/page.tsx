@@ -53,9 +53,7 @@ const Join = () => {
     } else if (error && !error.statusCode) {
       setApiError("Unknown API error");
     } else {
-      // actions.initializePoll(data.poll);
       dispatch(initializePoll(data.poll));
-      // actions.setPollAccessToken(data.accessToken);
       dispatch(setPollAccessToken(data.accessToken));
       router.push("/waiting-room");
     }
@@ -67,7 +65,7 @@ const Join = () => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        initial={{ y: -300, opacity: 0 }}
+        initial={{ y: 300, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{
