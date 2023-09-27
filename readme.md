@@ -25,10 +25,7 @@ You can also run these applications separately by running the appropriate npm sc
 * [ESLint](https://eslint.org/docs/user-guide/getting-started)
 
 ### Frontend Application
-* [Vite](https://vitejs.dev/)
 * [React](https://reactjs.org/)
-* [Valtio](https://github.com/pmndrs/valtio)
-* [Wouter](https://github.com/molefrog/wouter)
 * [Storybook](https://storybook.js.org/)
 * [Socket.io Client](https://socket.io/docs/v4/client-api/)
 * [Tailwind CSS](https://tailwindcss.com/)
