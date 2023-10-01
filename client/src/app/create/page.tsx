@@ -126,14 +126,14 @@ const Create = () => {
               <div className="flex flex-col justify-center items-center">
                 <button
                   className="box btn-orange w-32 my-2"
-                  onClick={() => handleCreatePoll()}
+                  onClick={handleCreatePoll}
                   disabled={!areFieldsValid()}
                 >
                   Create
                 </button>
                 <button
                   className="box btn-purple w-32 my-2"
-                  onClick={() => startOver()}
+                  onClick={startOver}
                 >
                   Start Over
                 </button>

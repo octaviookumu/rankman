@@ -28,8 +28,13 @@ const WaitingRoom = () => {
       nominationsCount >= (state.pollReducer.value.poll?.votesPerVoter ?? 100)
     );
   });
-  const { socketWithHandlers, removeParticipant, nominate, removeNomination } =
-    useSocketWithHandlers(state);
+  const {
+    socketWithHandlers,
+    removeParticipant,
+    nominate,
+    removeNomination,
+    startVote,
+  } = useSocketWithHandlers(state);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [isParticipantListOpen, setIsParticipantListOpen] = useState(false);
   const [isNominationFormOpen, setIsNominationFormOpen] = useState(false);
@@ -59,11 +64,28 @@ const WaitingRoom = () => {
 
   useEffect(() => {
     console.log("Waiting room useEffect");
-    if (!state.isSocketConnected && socketWithHandlers) {
+    if (socketWithHandlers && !socketWithHandlers?.connected) {
       socketWithHandlers.connect();
     }
     dispatch(stopLoading());
   }, []);
+
+  // Resets page when a participant is deleted
+  useEffect(() => {
+    const myID = state.me?.id;
+
+    if (
+      myID &&
+      socketWithHandlers?.connected &&
+      !state.poll?.participants[myID]
+    ) {
+      resetPoll();
+    }
+
+    if (myID && state.poll?.hasStarted) {
+      router.push("/voting");
+    }
+  }, [state.poll?.participants]);
 
   return (
     <>
@@ -128,9 +150,7 @@ const WaitingRoom = () => {
                       <button
                         className="box btn-orange my-2"
                         disabled={!canStartVoteStatus}
-                        onClick={() =>
-                          console.log("Start Vote to be implemented")
-                        }
+                        onClick={startVote}
                       >
                         Start Voting
                       </button>
@@ -156,7 +176,7 @@ const WaitingRoom = () => {
                     message="You will be kicked out of the poll"
                     showDialog={showLeavePollConfirmation}
                     onCancel={() => setShowLeavePollConfirmation(false)}
-                    onConfirm={() => resetPoll()}
+                    onConfirm={resetPoll}
                   />
                 </div>
               </div>
@@ -190,7 +210,7 @@ const WaitingRoom = () => {
             message={confirmationMessage}
             showDialog={isConfirmationOpen}
             onCancel={() => setIsConfirmationOpen(false)}
-            onConfirm={() => submitRemoveParticipant()}
+            onConfirm={submitRemoveParticipant}
           />
         </>
       )}
