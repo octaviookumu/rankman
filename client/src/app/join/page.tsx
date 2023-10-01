@@ -59,7 +59,7 @@ const Join = () => {
     }
 
     // actions.stopLoading();
-    dispatch(stopLoading());
+    // dispatch(stopLoading());
   };
 
   return (

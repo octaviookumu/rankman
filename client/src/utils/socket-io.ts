@@ -27,6 +27,14 @@ export const useSocketWithHandlers = (pollState: PollState) => {
     socketRef.current?.emit("start_vote");
   };
 
+  const submitRankings = (rankings: string[]) => {
+    socketRef.current?.emit("submit_rankings", { rankings });
+  };
+
+  const cancelPoll = () => {
+    socketRef.current?.emit("cancel_poll");
+  };
+
   useEffect(() => {
     if (pollState.accessToken) {
       socketRef.current = initializeSocket(pollState.accessToken, dispatch);
@@ -47,5 +55,7 @@ export const useSocketWithHandlers = (pollState: PollState) => {
     removeNomination,
     removeParticipant,
     startVote,
+    submitRankings,
+    cancelPoll,
   };
 };
