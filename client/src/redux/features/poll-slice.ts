@@ -108,6 +108,9 @@ export const PollSlice = createSlice({
         },
       };
     },
+    updateRankings: (state, action: PayloadAction<string[]>) => {
+      
+    },
     addWsError: (state, action: PayloadAction<WsError>) => {
       return {
         value: {

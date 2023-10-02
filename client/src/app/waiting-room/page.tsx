@@ -1,7 +1,7 @@
 "use client";
 import AllToasts from "@/components/ui/AllToasts";
 import Loader from "@/components/ui/Loader";
-import { reset, stopLoading } from "@/redux/features/poll-slice";
+import { stopLoading } from "@/redux/features/poll-slice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { useSocketWithHandlers } from "@/utils/socket-io";
 import { colorizeText } from "@/utils/util";
@@ -15,6 +15,7 @@ import ConfirmationDialog from "@/components/ui/ConfirmationDialog";
 import { useRouter } from "next/navigation";
 import ParticipantList from "@/components/ui/ParticipantList";
 import NominationForm from "@/components/ui/NominationForm";
+import { selectHasVoted } from "@/redux/selectors";
 
 const WaitingRoom = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -34,6 +35,7 @@ const WaitingRoom = () => {
     nominate,
     removeNomination,
     startVote,
+    resetPoll,
   } = useSocketWithHandlers(state);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const [isParticipantListOpen, setIsParticipantListOpen] = useState(false);
@@ -43,6 +45,7 @@ const WaitingRoom = () => {
   const [participantToRemove, setParticipantToRemove] = useState("");
   const [showLeavePollConfirmation, setShowLeavePollConfirmation] =
     useState(false);
+  const hasVoted = useSelector(selectHasVoted);
 
   const confirmRemoveParticipant = (id: string) => {
     setConfirmationMessage(`Remove ${state.poll?.participants[id]} from poll`);
@@ -53,13 +56,6 @@ const WaitingRoom = () => {
   const submitRemoveParticipant = () => {
     participantToRemove && removeParticipant(participantToRemove);
     setIsConfirmationOpen(false);
-  };
-
-  const resetPoll = () => {
-    socketWithHandlers?.disconnect();
-    dispatch(reset());
-    localStorage.removeItem("accessToken");
-    router.push("/");
   };
 
   useEffect(() => {
@@ -85,12 +81,17 @@ const WaitingRoom = () => {
     if (myID && state.poll?.hasStarted) {
       router.push("/voting");
     }
-  }, [state.poll?.participants]);
+  }, [
+    state.poll?.participants,
+    state.me?.id,
+    state.poll?.hasStarted,
+    hasVoted,
+  ]);
 
   return (
     <>
       {state.isLoading ? (
-        <Loader isLoading={state.isLoading} color="orange" width={120}></Loader>
+        <Loader color="orange" width={120}></Loader>
       ) : (
         <>
           {state.wsErrors.length > 0 && (

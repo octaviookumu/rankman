@@ -74,7 +74,7 @@ const Create = () => {
   return (
     <>
       {state.isLoading ? (
-        <Loader isLoading={state.isLoading} color="orange" width={120}></Loader>
+        <Loader color="orange" width={120}></Loader>
       ) : (
         <AnimatePresence mode="wait">
           <motion.div
