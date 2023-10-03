@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/index.ts": {
+      "runtime": "nodejs14.x"
+    }
+  },
+  "builds": [
+    {
+      "src": "server/**/*.ts",
+      "use": "@vercel/node"
+    }
+  ]
+}
