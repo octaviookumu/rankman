@@ -29,7 +29,6 @@ export type PollState = {
   isAdmin: boolean;
   hasVoted: boolean;
   rankingsCount: number;
-  isSocketConnected: boolean;
 };
 
 const initialState = {
@@ -45,7 +44,6 @@ const initialState = {
     isAdmin: false,
     hasVoted: false,
     rankingsCount: 0,
-    isSocketConnected: false,
   },
 } as StateType;
 
@@ -102,22 +100,6 @@ export const PollSlice = createSlice({
         },
       };
     },
-    socketConnected: (state) => {
-      return {
-        value: {
-          ...state.value,
-          isSocketConnected: true,
-        },
-      };
-    },
-    socketDisconnected: (state) => {
-      return {
-        value: {
-          ...state.value,
-          isSocketConnected: false,
-        },
-      };
-    },
     updatePoll: (state, action: PayloadAction<Poll>) => {
       return {
         value: {
@@ -125,6 +107,9 @@ export const PollSlice = createSlice({
           poll: action.payload,
         },
       };
+    },
+    updateRankings: (state, action: PayloadAction<string[]>) => {
+      
     },
     addWsError: (state, action: PayloadAction<WsError>) => {
       return {
@@ -170,8 +155,6 @@ export const {
   initializePoll,
   setPollAccessToken,
   updatePoll,
-  socketConnected,
-  socketDisconnected,
   addWsError,
   removeWsError,
   reset,

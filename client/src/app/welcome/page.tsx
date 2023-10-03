@@ -14,7 +14,6 @@ import {
 import { getTokenPayload } from "@/utils/util";
 import { useRouter } from "next/navigation";
 import { useSocketWithHandlers } from "@/utils/socket-io";
-import Toast from "@/components/ui/Toast";
 import AllToasts from "@/components/ui/AllToasts";
 
 const Welcome = () => {
@@ -73,7 +72,7 @@ const Welcome = () => {
   return (
     <>
       {state.isLoading ? (
-        <Loader isLoading={state.isLoading} color="orange" width={120}></Loader>
+        <Loader color="orange" width={120}></Loader>
       ) : (
         <>
           {state.wsErrors.length > 0 && (

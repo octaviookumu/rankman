@@ -1,7 +1,5 @@
 import {
   addWsError,
-  socketConnected,
-  socketDisconnected,
   stopLoading,
   updatePoll,
 } from "@/redux/features/poll-slice";
@@ -29,13 +27,9 @@ export const initializeSocket = (
     });
 
     socket.on("connect", () => {
-      if (dispatch) dispatch(socketConnected());
       console.log(`Connected with socketID: ${socket?.id}`);
     });
 
-    socket.on("disconnect", () => {
-      if (dispatch) dispatch(socketDisconnected());
-    });
 
     socket.on("connect_error", () => {
       console.log("Failed to connect to socket");

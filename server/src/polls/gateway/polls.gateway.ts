@@ -163,7 +163,7 @@ export class PollsGateway
   async startVote(@ConnectedSocket() client: SocketWithAuth): Promise<void> {
     this.logger.debug(`Attempting to start voting for poll: ${client.pollID}`);
 
-    const updatedPoll = this.pollsService.startPoll(client.pollID);
+    const updatedPoll = await this.pollsService.startPoll(client.pollID);
 
     this.io.to(client.pollID).emit('poll_updated', updatedPoll);
   }
@@ -174,7 +174,7 @@ export class PollsGateway
     @MessageBody('rankings') rankings: string[],
   ): Promise<void> {
     this.logger.debug(
-      `Submitting votes for user: ${client.userID} belonging to pollID: ${client.pollID}`,
+      `Submitting votes for user: ${client.userID} belonging to pollID: ${client.pollID}`
     );
 
     const updatedPoll = await this.pollsService.submitRankings({

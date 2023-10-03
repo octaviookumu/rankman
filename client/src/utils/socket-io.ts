@@ -1,5 +1,6 @@
-import { PollState } from "@/redux/features/poll-slice";
+import { PollState, reset } from "@/redux/features/poll-slice";
 import { AppDispatch } from "@/redux/store";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Socket } from "socket.io-client";
@@ -10,6 +11,7 @@ export const socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process
 export const useSocketWithHandlers = (pollState: PollState) => {
   const dispatch = useDispatch<AppDispatch>();
   const socketRef = useRef<Socket | undefined>(undefined);
+  const router = useRouter();
 
   const nominate = (text: string): void => {
     socketRef.current?.emit("nominate", { text });
@@ -25,6 +27,29 @@ export const useSocketWithHandlers = (pollState: PollState) => {
 
   const startVote = () => {
     socketRef.current?.emit("start_vote");
+  };
+
+  const submitRankings = (rankings: string[]) => {
+    socketRef.current?.emit("submit_rankings", { rankings });
+    // console.log('pollState', pollState)
+    router.push("/results");
+  };
+
+  const cancelPoll = () => {
+    socketRef.current?.emit("cancel_poll");
+    resetPoll();
+  };
+
+  const closePoll = () => {
+    socketRef.current?.emit("close_poll");
+    router.push("/results");
+  };
+
+  const resetPoll = () => {
+    socketRef.current?.disconnect();
+    dispatch(reset());
+    localStorage.removeItem("accessToken");
+    router.push("/");
   };
 
   useEffect(() => {
@@ -47,5 +72,9 @@ export const useSocketWithHandlers = (pollState: PollState) => {
     removeNomination,
     removeParticipant,
     startVote,
+    submitRankings,
+    cancelPoll,
+    closePoll,
+    resetPoll,
   };
 };
