@@ -6,7 +6,7 @@
   },
   "builds": [
     {
-      "src": "server/**/*.ts",
+      "src": "**/*.ts",
       "use": "@vercel/node"
     }
   ]
