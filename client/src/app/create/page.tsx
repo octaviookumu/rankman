@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import CountSelector from "../../components/ui/CountSelector";
-import { Poll } from "shared/poll-types";
+import { Poll } from "../types/poll-types";
 import { makeRequest } from ".././../api";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";

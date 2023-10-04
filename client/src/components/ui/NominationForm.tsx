@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { MdCancel } from "react-icons/md";
-import { Nominations } from "shared/poll-types";
-import BottomSheet, { BottemSheetProps } from "./BottomSheet";
+import { Nominations } from "../../app/types/poll-types";
+import BottomSheet, { BottomSheetProps } from "./BottomSheet";
 
 type NominationFormProps = {
   title?: string;
@@ -11,7 +11,7 @@ type NominationFormProps = {
   isAdmin: boolean;
   onSubmitNomination: (nomination: string) => void;
   onRemoveNomination: (nominationID: string) => void;
-} & BottemSheetProps;
+} & BottomSheetProps;
 
 const NominationForm: React.FC<NominationFormProps> = ({
   isOpen,

@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Nomination } from 'shared';
+import { Nomination } from '../types/poll-types';
 import { Socket } from 'socket.io';
 
 // service types

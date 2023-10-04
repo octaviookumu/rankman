@@ -1,14 +1,14 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
-import { Participants } from "shared/poll-types";
-import BottomSheet, { BottemSheetProps } from "./BottomSheet";
+import { Participants } from "../../app/types/poll-types";
+import BottomSheet, { BottomSheetProps } from "./BottomSheet";
 
 type ParticipantListProps = {
   participants?: Participants;
   userID?: string;
   isAdmin: boolean;
   onRemoveParticipant: (id: string) => void;
-} & BottemSheetProps;
+} & BottomSheetProps;
 
 const ParticipantList: React.FC<ParticipantListProps> = ({
   isOpen,

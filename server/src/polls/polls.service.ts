@@ -15,7 +15,7 @@ import {
   getResults,
 } from './utils';
 import { JwtService } from '@nestjs/jwt';
-import { Poll } from 'shared';
+import { Poll } from '../polls/types/poll-types';
 
 @Injectable()
 export class PollsService {

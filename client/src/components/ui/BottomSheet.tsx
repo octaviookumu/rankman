@@ -4,13 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import styles from "./BottomSheet.module.css";
 
-export type BottemSheetProps = {
+export type BottomSheetProps = {
   isOpen: boolean;
   onClose?: (e: React.MouseEvent<SVGElement, MouseEvent>) => void;
   children?: ReactNode;
 };
 
-const BottomSheet: React.FC<BottemSheetProps> = ({
+const BottomSheet: React.FC<BottomSheetProps> = ({
   isOpen = false,
   onClose,
   children,

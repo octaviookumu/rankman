@@ -1,4 +1,4 @@
-import { Nominations, Rankings, Results } from 'shared';
+import { Nominations, Rankings, Results } from '../types/poll-types';
 
 export const getResults = (
   rankings: Rankings,

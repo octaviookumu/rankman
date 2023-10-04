@@ -5,8 +5,7 @@
   "main": "index.js",
   "workspaces": [
     "client",
-    "server",
-    "shared"
+    "server"
   ],
   "scripts": {
     "docker:compose": "docker-compose up -d",

@@ -10,8 +10,7 @@ export const redisModule = RedisModule.registerAsync({
 
     return {
       connectionOptions: {
-        host: configService.get('REDIS_HOST'),
-        port: configService.get('REDIS_PORT'),
+        url: configService.get('REDIS_URL'),
       },
       onClientReady: (client) => {
         logger.log('Redis client ready');
@@ -21,9 +20,7 @@ export const redisModule = RedisModule.registerAsync({
         });
 
         client.on('connect', () => {
-          logger.log(
-            `Connected to redis on ${client.options.host}:${client.options.port}`,
-          );
+          logger.log(`Connected to redis on ${client.options.url}`);
         });
       },
     };

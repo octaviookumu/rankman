@@ -1,6 +1,6 @@
 import { getTokenPayload, setLocalStorageAccessToken } from "@/utils/util";
 import { createSlice, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { Poll } from "shared/poll-types";
+import { Poll } from "../../app/types/poll-types";
 
 export type StateType = {
   value: PollState;
@@ -109,7 +109,7 @@ export const PollSlice = createSlice({
       };
     },
     updateRankings: (state, action: PayloadAction<string[]>) => {
-      
+
     },
     addWsError: (state, action: PayloadAction<WsError>) => {
       return {
