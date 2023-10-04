@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { MdCancel } from "react-icons/md";
-import { Nominations } from "shared/poll-types";
+import { Nominations } from "../../app/types/poll-types";
 import BottomSheet, { BottomSheetProps } from "./BottomSheet";
 
 type NominationFormProps = {

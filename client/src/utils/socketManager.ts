@@ -4,7 +4,7 @@ import {
   updatePoll,
 } from "@/redux/features/poll-slice";
 import { AppDispatch } from "@/redux/store";
-import { Poll } from "shared/poll-types";
+import { Poll } from "../app/types/poll-types";
 import { io, Socket } from "socket.io-client";
 
 const socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_POLLS_NAMESPACE}`;

@@ -1,6 +1,6 @@
 import React from "react";
 import { MdClose } from "react-icons/md";
-import { Participants } from "shared/poll-types";
+import { Participants } from "../../app/types/poll-types";
 import BottomSheet, { BottomSheetProps } from "./BottomSheet";
 
 type ParticipantListProps = {

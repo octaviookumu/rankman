@@ -10,7 +10,7 @@ import {
   setPollAccessToken,
   stopLoading,
 } from "@/redux/features/poll-slice";
-import { Poll } from "shared/poll-types";
+import { Poll } from "../types/poll-types";
 import Loader from "@/components/ui/Loader";
 import { motion, AnimatePresence } from "framer-motion";
 
