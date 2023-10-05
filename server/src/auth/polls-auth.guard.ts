@@ -2,7 +2,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CanActivate, Logger, ExecutionContext } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { RequestWithAuth } from 'src/polls/types';
+import { RequestWithAuth } from '../polls/types';
 
 @Injectable()
 export class PollsAuthGuard implements CanActivate {
