@@ -17,7 +17,8 @@ async function bootstrap() {
     origin: [
       `http://localhost:${clientPort}`,
       new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
-      ...VIABLE_URLS
+      'https://rankman-client.vercel.app',
+      'https://rankman-client-git-fixer-octaviookumu.vercel.app',
     ],
   });
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
