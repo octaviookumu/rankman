@@ -25,7 +25,6 @@ const makeRequest = async <T>(
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Test-Header": "Deez Nuts",
       },
       ...reqInit,
     });
