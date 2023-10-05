@@ -7,7 +7,7 @@ import { VIABLE_URLS } from './common/constants';
 
 async function bootstrap() {
   const logger = new Logger('Main (main.ts)');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
 
   const configService = app.get(ConfigService);
   const port = parseInt(configService.get('PORT'));
@@ -17,11 +17,11 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      `http://localhost:${clientPort}`,
-      new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
-      ...VIABLE_URLS,
+      'https://rankman-client.vercel.app',
+      'https://rankman-client.vercel.app/polls',
+      'https://rankman-client-git-fixer-octaviookumu.vercel.app',
     ],
-    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Deez Nuts'],
   });
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
 
