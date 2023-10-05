@@ -13,15 +13,8 @@ async function bootstrap() {
   const port = parseInt(configService.get('PORT'));
   const clientPort = parseInt(configService.get('CLIENT_PORT'));
 
-  console.log('VIABLE_URLS', VIABLE_URLS);
-
   app.enableCors({
-    origin: [
-      'https://rankman-client.vercel.app',
-      'https://rankman-client.vercel.app/polls',
-      'https://rankman-client-git-fixer-octaviookumu.vercel.app',
-    ],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Deez Nuts'],
+    origin: 'https://rankman-client-git-fixer-octaviookumu.vercel.app'
   });
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
 
