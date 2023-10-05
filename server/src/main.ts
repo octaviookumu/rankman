@@ -15,14 +15,7 @@ async function bootstrap() {
 
   console.log('VIABLE_URLS', VIABLE_URLS);
 
-  app.enableCors({
-    origin: [
-      `http://localhost:${clientPort}`,
-      new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
-      ...VIABLE_URLS,
-    ],
-    methods: ['GET', 'POST'],
-  });
+  app.enableCors();
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
 
   await app.listen(port);
