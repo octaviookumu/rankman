@@ -1,4 +1,10 @@
-const baseApiUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}`;
+let baseApiUrl: string;
+
+if (process.env.NODE_ENV === "production") {
+  baseApiUrl = `https://${process.env.NEXT_PUBLIC_API_HOST}`;
+} else {
+  baseApiUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}`;
+}
 
 interface APIError {
   messages: string[];

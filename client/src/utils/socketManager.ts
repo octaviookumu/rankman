@@ -7,7 +7,13 @@ import { AppDispatch } from "@/redux/store";
 import { Poll } from "../app/types/poll-types";
 import { io, Socket } from "socket.io-client";
 
-const socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_POLLS_NAMESPACE}`;
+let socketIOUrl: string;
+
+if (process.env.NODE_ENV === "production") {
+  socketIOUrl = `https://${process.env.NEXT_PUBLIC_API_HOST}/${process.env.NEXT_PUBLIC_POLLS_NAMESPACE}`;
+} else {
+  socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_POLLS_NAMESPACE}`;
+}
 
 let socket: Socket | undefined = undefined;
 let dispatch: AppDispatch | undefined = undefined;
@@ -29,7 +35,6 @@ export const initializeSocket = (
     socket.on("connect", () => {
       console.log(`Connected with socketID: ${socket?.id}`);
     });
-
 
     socket.on("connect_error", () => {
       console.log("Failed to connect to socket");
