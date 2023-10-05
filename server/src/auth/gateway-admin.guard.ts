@@ -5,9 +5,9 @@ import {
   Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { WsUnauthorizedException } from 'src/exceptions/ws-exceptions';
-import { PollsService } from 'src/polls/polls.service';
-import { AuthPayload, SocketWithAuth } from 'src/polls/types';
+import { WsUnauthorizedException } from '../exceptions/ws-exceptions';
+import { PollsService } from '../polls/polls.service';
+import { AuthPayload, SocketWithAuth } from '../polls/types';
 
 @Injectable()
 export class GatewayAdminGuard implements CanActivate {
