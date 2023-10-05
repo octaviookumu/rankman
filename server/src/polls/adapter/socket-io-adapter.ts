@@ -19,8 +19,7 @@ export class SocketIOAdapter extends IoAdapter {
     const clientPort = parseInt(this.configService.get<string>('CLIENT_PORT'));
 
     const cors = {
-      origin: 'https://rankman-client-git-fixer-octaviookumu.vercel.app',
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+      origin: [`http://localhost:${clientPort}`, ...VIABLE_URLS],
     };
 
     this.logger.log('Configuring SocketIO server with custom CORS options', {
