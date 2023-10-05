@@ -15,19 +15,14 @@ async function bootstrap() {
 
   console.log('VIABLE_URLS', VIABLE_URLS);
 
-  app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
-    next();
-  });
-
   app.enableCors({
-    allowedHeaders: '*',
-    origin: '*',
+    origin: [
+      'https://rankman-client.vercel.app',
+      'https://rankman-client.vercel.app/polls',
+      'https://rankman-client-git-fixer-octaviookumu.vercel.app',
+    ],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Deez Nuts'],
   });
-
-  app.enableCors();
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
 
   await app.listen(port);
