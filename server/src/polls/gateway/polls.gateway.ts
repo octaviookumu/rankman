@@ -20,8 +20,8 @@ import {
 import { PollsService } from '../polls.service';
 import { Namespace } from 'socket.io';
 import { SocketWithAuth } from '../types';
-import { WsCatchAllFilter } from 'src/exceptions/ws-catch-all-filter';
-import { GatewayAdminGuard } from 'src/auth/gateway-admin.guard';
+import { WsCatchAllFilter } from '../../exceptions/ws-catch-all-filter';
+import { GatewayAdminGuard } from '../../auth/gateway-admin.guard';
 import { NominationDto } from '../dto';
 
 @UsePipes(new ValidationPipe())
