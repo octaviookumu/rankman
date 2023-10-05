@@ -25,7 +25,7 @@ const makeRequest = async <T>(
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin" : "https://rankman-client-git-fixer-octaviookumu.vercel.app",
+        "Test-Header": "Deez Nuts",
       },
       ...reqInit,
     });

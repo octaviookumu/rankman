@@ -14,7 +14,7 @@ async function bootstrap() {
   const clientPort = parseInt(configService.get('CLIENT_PORT'));
 
   app.enableCors({
-    origin: 'https://rankman-client-git-fixer-octaviookumu.vercel.app'
+    origin: [`http://localhost:${clientPort}`, ...VIABLE_URLS],
   });
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
 
