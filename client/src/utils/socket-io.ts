@@ -6,8 +6,6 @@ import { useDispatch } from "react-redux";
 import { Socket } from "socket.io-client";
 import { initializeSocket, disconnectSocket } from "./socketManager";
 
-export const socketIOUrl = `http://${process.env.NEXT_PUBLIC_API_HOST}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_POLLS_NAMESPACE}`;
-
 export const useSocketWithHandlers = (pollState: PollState) => {
   const dispatch = useDispatch<AppDispatch>();
   const socketRef = useRef<Socket | undefined>(undefined);
