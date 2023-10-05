@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 import { ServerOptions, Server } from 'socket.io';
+import { VIABLE_URLS } from 'src/common/constants';
 import { SocketWithAuth } from '../types';
 
 export class SocketIOAdapter extends IoAdapter {
@@ -21,7 +22,7 @@ export class SocketIOAdapter extends IoAdapter {
       origin: [
         `http://localhost:${clientPort}`,
         new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
-        'https://rankman-server.vercel.app',
+        ...VIABLE_URLS,
       ],
     };
 

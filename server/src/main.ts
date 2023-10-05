@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SocketIOAdapter } from './polls/adapter/socket-io-adapter';
+import { VIABLE_URLS } from './common/constants';
 
 async function bootstrap() {
   const logger = new Logger('Main (main.ts)');
@@ -16,7 +17,7 @@ async function bootstrap() {
     origin: [
       `http://localhost:${clientPort}`,
       new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
-      'https://rankman-server.vercel.app/',
+      ...VIABLE_URLS
     ],
   });
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
