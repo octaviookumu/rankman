@@ -15,7 +15,7 @@ const nextConfig = {
         source: "/polls/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          { key: "Access-Control-Allow-Origin", value: "https://rankman-client-git-fixer-octaviookumu.vercel.app" },
           {
             key: "Access-Control-Allow-Methods",
             value: "GET,DELETE,PATCH,POST,PUT",
