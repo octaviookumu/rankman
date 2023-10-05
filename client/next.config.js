@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://rankman-server.vercel.app/:path*",
+      },
+    ];
+  },
   async headers() {
     return [
       {
