@@ -11,12 +11,13 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = parseInt(configService.get('PORT'));
   const clientPort = parseInt(configService.get('CLIENT_PORT'));
+  const productionOrigin = configService.get('PRODUCTION_ORIGIN');
 
   app.enableCors({
     origin: [
       `http://localhost:${clientPort}`,
       new RegExp(`/^http:\/\/192\.168\.1\.([1-9]|[1-9]\d):${clientPort}$/`),
-      'https://rankman-server.vercel.app/',
+      productionOrigin,
     ],
   });
   app.useWebSocketAdapter(new SocketIOAdapter(app, configService));
