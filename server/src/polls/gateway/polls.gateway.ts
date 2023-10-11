@@ -28,6 +28,9 @@ import { NominationDto } from '../dto';
 @UseFilters(new WsCatchAllFilter())
 @WebSocketGateway({
   namespace: 'polls',
+  cors: {
+    origin: '*',
+  },
 })
 export class PollsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
