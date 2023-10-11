@@ -28,6 +28,9 @@ import { NominationDto } from '../dto';
 @UseFilters(new WsCatchAllFilter())
 @WebSocketGateway({
   namespace: 'polls',
+  cors: {
+    origin: '*',
+  },
 })
 export class PollsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
@@ -174,7 +177,7 @@ export class PollsGateway
     @MessageBody('rankings') rankings: string[],
   ): Promise<void> {
     this.logger.debug(
-      `Submitting votes for user: ${client.userID} belonging to pollID: ${client.pollID}`
+      `Submitting votes for user: ${client.userID} belonging to pollID: ${client.pollID}`,
     );
 
     const updatedPoll = await this.pollsService.submitRankings({
